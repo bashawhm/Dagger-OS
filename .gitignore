@@ -1,3 +1,8 @@
 
 /target
 **/*.rs.bk
+
+.build/
+.vscode/
+*.o
+.DS_Store
