@@ -1,10 +1,13 @@
 #![cfg_attr(test, allow(dead_code, unused_macros))]
 #![feature(lang_items)]
+#![feature(panic_implementation)]
 #![no_std]
 #![cfg_attr(not(test), no_main)]
 #[macro_use]
 extern crate lazy_static;
 extern crate multiboot2;
+
+use core::panic::PanicInfo;
 
 #[macro_use]
 mod vga_buffer;
@@ -72,10 +75,9 @@ pub extern fn eh_personality(){
 
 }
 
-#[lang = "panic_fmt"]
+#[panic_implementation]
 #[no_mangle]
-pub extern fn panic_fmt(fmt: core::fmt::Arguments, file: &'static str, line: u32) -> ! {
-	println!("\n\nPANIC in {} at line {}:", file, line);
-	println!("    {}", fmt);
+pub extern fn panic_fmt(_info: &PanicInfo) -> ! {
+	println!("\n\nPANIC");
 	loop {}
 }

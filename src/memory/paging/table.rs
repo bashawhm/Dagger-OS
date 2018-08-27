@@ -1,5 +1,5 @@
 use memory::paging::entry::*;
-use memory::pagin::ENTRY_COUNT;
+use memory::paging::ENTRY_COUNT;
 use core::ops::{Index, IndexMut};
 
 pub struct Table {

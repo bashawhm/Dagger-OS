@@ -1,5 +1,5 @@
 [package]
-name = "dagger_mig"
+name = "dagger_os"
 version = "0.1.0"
 authors = ["Hunter Bashaw <hunter@blivet.sh>"]
 
