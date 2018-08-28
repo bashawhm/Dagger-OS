@@ -8,7 +8,7 @@ assembly_source_files := $(wildcard src/arch/$(arch)/*.asm)
 assembly_object_files := $(patsubst src/arch/$(arch)/%.asm, .build/arch/$(arch)/%.o, $(assembly_source_files))
 
 target ?= $(arch)-dagger_os
-rust_os := target/$(target)/debug/libdagger_mig.a
+rust_os := target/$(target)/debug/libdagger_os.a
 
 
 .PHONY: all clean run iso kernel
@@ -19,7 +19,7 @@ clean:
 	@rm -rf .build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso)
+	@qemu-system-x86_64 -cdrom $(iso) -serial mon:stdio -device isa-debug-exit,iobase=0xf4,iosize=0x04 -display none
 
 iso: $(iso)
 

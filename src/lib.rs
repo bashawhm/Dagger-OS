@@ -6,11 +6,15 @@
 #[macro_use]
 extern crate lazy_static;
 extern crate multiboot2;
+extern crate uart_16550;
+extern crate x86_64;
 
 use core::panic::PanicInfo;
 
 #[macro_use]
 mod vga_buffer;
+#[macro_use]
+mod serial;
 extern crate volatile;
 extern crate rlibc;
 extern crate spin;
@@ -24,9 +28,18 @@ extern crate std;
 #[cfg(test)]
 extern crate array_init;
 
+
+pub unsafe fn exit_qemu() {
+    use x86_64::instructions::port::Port;
+    let mut port = Port::<u32>::new(0xf4);
+    port.write(0);
+}
+
+
 #[no_mangle]
 pub extern fn rust_main(multiboot_information_address: usize) {
     println!("Booting...");
+//    serial_println!("Booting...");
 	use memory::FrameAllocator;
 	let boot_info = unsafe {multiboot2::load(multiboot_information_address)};
 	let memory_map_tag = boot_info.memory_map_tag().expect("Memory map tag required");
@@ -67,6 +80,8 @@ pub extern fn rust_main(multiboot_information_address: usize) {
 		    break;
 		}
 	}
+
+	unsafe {exit_qemu();}
 }
 
 #[lang = "eh_personality"]
@@ -79,5 +94,6 @@ pub extern fn eh_personality(){
 #[no_mangle]
 pub extern fn panic_fmt(_info: &PanicInfo) -> ! {
 	println!("\n\nPANIC");
+	unsafe {exit_qemu();}
 	loop {}
 }

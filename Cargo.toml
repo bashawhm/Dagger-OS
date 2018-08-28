@@ -12,6 +12,8 @@ volatile = "0.2.3"
 rlibc = "1.0"
 spin = "0.4.6"
 bitflags = "0.9.1"
+uart_16550 = "0.1.0"
+x86_64 = "0.2.6"
 
 [dev-dependencies]
 array-init = "0.0.3"
